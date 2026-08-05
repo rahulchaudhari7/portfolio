@@ -8,6 +8,8 @@ import ScrollProgressBar from './components/ScrollProgressBar'
 import AnimatedCursor from './components/AnimatedCursor'
 import BackToTop from './components/BackToTop'
 import LoadingScreen from './components/LoadingScreen'
+import JarvisWidget from './components/JarvisWidget'
+import JarvisHudBackground from './components/JarvisHudBackground'
 
 import Hero from './components/Hero'
 import About from './components/About'
@@ -25,7 +27,7 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000)
+    const timer = setTimeout(() => setLoading(false), 2200)
     return () => clearTimeout(timer)
   }, [])
 
@@ -41,6 +43,7 @@ function App() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
+            <JarvisHudBackground />
             <Toaster position="top-right" />
             <AnimatedCursor />
             <ScrollProgressBar />
@@ -60,6 +63,7 @@ function App() {
             </main>
 
             <Footer />
+            <JarvisWidget />
             <BackToTop />
           </motion.div>
         )}

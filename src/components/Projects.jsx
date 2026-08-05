@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiGithub, FiExternalLink, FiSearch, FiClock, FiCheckCircle, FiLoader, FiBookOpen } from 'react-icons/fi'
+import { FiGithub, FiExternalLink, FiSearch, FiClock, FiCheckCircle, FiLoader, FiBookOpen, FiCpu } from 'react-icons/fi'
 import { projects, projectCategories } from '../data/portfolioData'
+import { jarvisAudio } from '../utils/jarvisAudio'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -9,10 +10,10 @@ const fadeUp = {
 }
 
 const statusConfig = {
-  completed: { label: 'Completed', icon: FiCheckCircle, color: 'text-green-500' },
-  'in-progress': { label: 'In Progress', icon: FiLoader, color: 'text-yellow-500' },
-  planned: { label: 'Planned', icon: FiClock, color: 'text-gray-400' },
-  research: { label: 'Research', icon: FiBookOpen, color: 'text-primary-500' },
+  completed: { label: 'DEPLOYED', icon: FiCheckCircle, color: 'text-emerald-400 border-emerald-500/50 bg-emerald-950/60' },
+  'in-progress': { label: 'PROTOCOL ACTIVE', icon: FiLoader, color: 'text-amber-400 border-amber-500/50 bg-amber-950/60' },
+  planned: { label: 'PLANNED MODULE', icon: FiClock, color: 'text-cyan-400 border-cyan-500/50 bg-cyan-950/60' },
+  research: { label: 'STARK R&D', icon: FiBookOpen, color: 'text-sky-400 border-sky-500/50 bg-sky-950/60' },
 }
 
 const ProjectCard = ({ project, index }) => {
@@ -27,59 +28,72 @@ const ProjectCard = ({ project, index }) => {
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
       whileHover={{ y: -8 }}
-      className="group rounded-2xl overflow-hidden glass border border-white/5 hover:border-primary-500/30 transition-colors flex flex-col"
+      onClick={() => jarvisAudio.playBeep(1100, 'sine', 0.08)}
+      className="group rounded-2xl overflow-hidden bg-dark-900/90 border border-cyan-500/30 hover:border-cyan-400 shadow-hud-cyan transition-all flex flex-col relative"
     >
-      {/* Image */}
-      <div className="relative h-44 overflow-hidden bg-gradient-to-br from-primary-500/20 to-accent-500/20">
+      {/* Corner Bracket Accents */}
+      <div className="absolute top-2 left-2 z-10 w-3 h-3 border-t-2 border-l-2 border-cyan-400" />
+      <div className="absolute top-2 right-2 z-10 w-3 h-3 border-t-2 border-r-2 border-cyan-400" />
+
+      {/* Image / Hologram Banner */}
+      <div className="relative h-48 overflow-hidden bg-dark-950 border-b border-cyan-500/20 flex items-center justify-center">
         <img
           src={project.image}
           alt={project.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100"
           onError={(e) => {
             e.target.style.display = 'none'
           }}
         />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-4xl font-display font-extrabold gradient-text opacity-30">
+        
+        {/* Hologram Overlay Line */}
+        <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-cyan-500/10 pointer-events-none" />
+
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <span className="text-5xl font-display font-black text-cyan-400/20 group-hover:text-cyan-400/40 transition-colors uppercase">
             {project.title.charAt(0)}
           </span>
         </div>
+
         {status && (
-          <span className={`absolute top-3 right-3 flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium glass ${status.color}`}>
-            <StatusIcon size={12} />
+          <span className={`absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase border shadow-sm ${status.color}`}>
+            <StatusIcon size={12} className="animate-pulse" />
             {status.label}
           </span>
         )}
       </div>
 
       {/* Content */}
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="text-lg font-display font-bold mb-2">{project.title}</h3>
-        <p className="text-sm mb-4 flex-1" style={{ color: 'var(--text-secondary)' }}>
+      <div className="p-6 flex flex-col flex-1 font-sans">
+        <h3 className="text-lg font-display font-black mb-2 text-slate-100 uppercase tracking-wide group-hover:text-cyan-300 transition-colors">
+          {project.title}
+        </h3>
+        <p className="text-xs font-tech text-slate-300 mb-4 flex-1 leading-relaxed">
           {project.description}
         </p>
 
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-5">
           {project.tech.map((t) => (
-            <span key={t} className="text-xs px-2.5 py-1 rounded-full bg-primary-500/10 text-primary-500 font-medium">
+            <span key={t} className="text-[10px] font-mono font-semibold px-2.5 py-1 rounded bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 uppercase">
               {t}
             </span>
           ))}
         </div>
 
-        <div className="flex gap-3 mt-auto">
+        <div className="flex gap-4 mt-auto pt-3 border-t border-cyan-500/20 font-mono text-xs">
           {project.github ? (
             <a
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm font-medium hover:text-primary-500 transition-colors"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1.5 text-cyan-400 hover:text-amber-400 transition-colors font-bold uppercase"
             >
-              <FiGithub /> Code
+              <FiGithub /> CODE_SRC
             </a>
           ) : (
-            <span className="flex items-center gap-2 text-sm font-medium text-gray-500 cursor-not-allowed">
-              <FiGithub /> Code
+            <span className="flex items-center gap-1.5 text-slate-600 cursor-not-allowed uppercase">
+              <FiGithub /> PRIVATE_REPO
             </span>
           )}
           {project.demo ? (
@@ -87,13 +101,14 @@ const ProjectCard = ({ project, index }) => {
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm font-medium hover:text-primary-500 transition-colors"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1.5 text-cyan-400 hover:text-amber-400 transition-colors font-bold uppercase"
             >
-              <FiExternalLink /> Live Demo
+              <FiExternalLink /> LIVE_DEMO
             </a>
           ) : (
-            <span className="flex items-center gap-2 text-sm font-medium text-gray-500 cursor-not-allowed">
-              <FiExternalLink /> Live Demo
+            <span className="flex items-center gap-1.5 text-slate-600 cursor-not-allowed uppercase">
+              <FiExternalLink /> OFFLINE
             </span>
           )}
         </div>
@@ -105,6 +120,11 @@ const ProjectCard = ({ project, index }) => {
 const Projects = () => {
   const [activeCategory, setActiveCategory] = useState('All')
   const [searchTerm, setSearchTerm] = useState('')
+
+  const handleCatClick = (cat) => {
+    jarvisAudio.playBeep(1200, 'sine', 0.08)
+    setActiveCategory(cat)
+  }
 
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
@@ -118,7 +138,7 @@ const Projects = () => {
   }, [activeCategory, searchTerm])
 
   return (
-    <section id="projects" className="section">
+    <section id="projects" className="section relative">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -127,9 +147,12 @@ const Projects = () => {
         transition={{ duration: 0.6 }}
         className="text-center mb-12"
       >
-        <p className="text-primary-500 font-mono text-sm mb-2 tracking-widest uppercase">Things I've built</p>
-        <h2 className="text-3xl md:text-5xl font-display font-extrabold">
-          My <span className="gradient-text">Projects</span>
+        <p className="text-cyan-400 font-mono text-xs mb-2 tracking-widest uppercase flex items-center justify-center gap-2">
+          <FiCpu className="text-amber-400 animate-pulse" />
+          STARK PROTOCOLS // ARCHITECTURAL BLUEPRINTS
+        </p>
+        <h2 className="text-3xl md:text-5xl font-display font-black uppercase tracking-wider">
+          PROJECT <span className="gradient-text">REPOSITORY</span>
         </h2>
       </motion.div>
 
@@ -143,25 +166,25 @@ const Projects = () => {
         className="flex flex-col md:flex-row gap-4 mb-10 items-center justify-between"
       >
         <div className="relative w-full md:w-80">
-          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400" />
           <input
             type="text"
-            placeholder="Search projects..."
+            placeholder="SEARCH BLUEPRINTS..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 rounded-full glass border border-white/10 focus:border-primary-500/50 outline-none text-sm"
+            className="w-full pl-11 pr-4 py-2.5 rounded-lg bg-dark-900 border border-cyan-500/40 focus:border-cyan-400 text-cyan-200 placeholder:text-cyan-600 font-mono text-xs outline-none shadow-hud-cyan uppercase"
           />
         </div>
 
-        <div className="flex gap-2 flex-wrap justify-center">
+        <div className="flex gap-2 flex-wrap justify-center font-mono text-xs">
           {projectCategories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              onClick={() => handleCatClick(cat)}
+              className={`px-4 py-2 rounded-lg font-bold uppercase transition-all ${
                 activeCategory === cat
-                  ? 'gradient-bg text-white shadow-lg shadow-primary-500/30'
-                  : 'glass hover:text-primary-500'
+                  ? 'bg-cyan-500 text-dark-950 shadow-[0_0_15px_#00f3ff]'
+                  : 'bg-dark-900/80 border border-cyan-500/30 text-cyan-400 hover:border-cyan-400'
               }`}
             >
               {cat}
@@ -183,10 +206,9 @@ const Projects = () => {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center mt-10"
-          style={{ color: 'var(--text-secondary)' }}
+          className="text-center mt-10 font-mono text-xs text-slate-400 uppercase tracking-widest"
         >
-          No projects found. Try a different search or filter.
+          [NO BLUEPRINTS MATCH SEARCH QUERY]
         </motion.p>
       )}
     </section>

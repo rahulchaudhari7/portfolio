@@ -1,7 +1,8 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { FiAward, FiUsers, FiCalendar, FiCode } from 'react-icons/fi'
+import { FiAward, FiUsers, FiCalendar, FiCode, FiCpu } from 'react-icons/fi'
 import { achievements } from '../data/portfolioData'
+import { jarvisAudio } from '../utils/jarvisAudio'
 
 const iconMap = {
   trophy: FiAward,
@@ -17,7 +18,7 @@ const fadeUp = {
 
 const Achievements = () => {
   return (
-    <section id="achievements" className="section">
+    <section id="achievements" className="section relative">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -26,9 +27,12 @@ const Achievements = () => {
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <p className="text-primary-500 font-mono text-sm mb-2 tracking-widest uppercase">Milestones</p>
-        <h2 className="text-3xl md:text-5xl font-display font-extrabold">
-          <span className="gradient-text">Achievements</span>
+        <p className="text-cyan-400 font-mono text-xs mb-2 tracking-widest uppercase flex items-center justify-center gap-2">
+          <FiCpu className="text-amber-400 animate-pulse" />
+          SYSTEM MILESTONES // HONORS LOG
+        </p>
+        <h2 className="text-3xl md:text-5xl font-display font-black uppercase tracking-wider">
+          NOTABLE <span className="gradient-text">ACHIEVEMENTS</span>
         </h2>
       </motion.div>
 
@@ -44,13 +48,20 @@ const Achievements = () => {
               variants={fadeUp}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               whileHover={{ y: -6 }}
-              className="p-6 rounded-2xl glass border border-white/5 hover:border-primary-500/30 transition-colors text-center"
+              onClick={() => jarvisAudio.playBeep(1200, 'sine', 0.08)}
+              className="p-6 rounded-2xl bg-dark-900/90 border border-cyan-500/30 hover:border-cyan-400 shadow-hud-cyan transition-all text-center relative group cursor-pointer"
             >
-              <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center text-white mx-auto mb-4 shadow-lg shadow-primary-500/30">
+              {/* Corner brackets */}
+              <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400" />
+              <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-cyan-400" />
+
+              <div className="w-14 h-14 rounded-xl bg-cyan-950 border border-cyan-400/50 flex items-center justify-center text-cyan-400 mx-auto mb-4 shadow-[0_0_15px_rgba(0,243,255,0.3)] group-hover:bg-cyan-500 group-hover:text-dark-950 transition-colors">
                 <Icon size={24} />
               </div>
-              <h3 className="font-display font-bold mb-2">{ach.title}</h3>
-              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+              <h3 className="font-display font-black mb-2 text-slate-100 uppercase text-sm tracking-wide group-hover:text-cyan-300">
+                {ach.title}
+              </h3>
+              <p className="text-xs font-tech text-slate-300 leading-relaxed">
                 {ach.description}
               </p>
             </motion.div>
