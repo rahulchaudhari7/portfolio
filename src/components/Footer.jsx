@@ -28,7 +28,7 @@ const Footer = () => {
         <div className="text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-2 text-cyan-400 font-display font-black text-lg tracking-wider">
             <FiShield className="text-amber-400" />
-            <span>STARK OS // JARVIS</span>
+            <span>RC SYSTEM // RAHUL CHAUDHARY</span>
           </div>
           <p className="text-slate-400 text-xs mt-1 font-tech">
             {personalInfo.name} &middot; {personalInfo.title}

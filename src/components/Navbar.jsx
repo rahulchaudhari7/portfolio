@@ -104,7 +104,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-3 px-3 py-1 rounded bg-dark-900 border border-cyan-500/30 text-xs font-mono text-cyan-400">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-              <span className="text-[11px] text-cyan-300 tracking-wider">JARVIS ONLINE</span>
+              <span className="text-[11px] text-cyan-300 tracking-wider">SYSTEM ONLINE</span>
             </span>
             <span className="text-cyan-600">|</span>
             <span className="text-amber-400 text-[11px] font-bold">{timeStr || '08:16:26'}</span>
@@ -114,7 +114,7 @@ const Navbar = () => {
             onClick={toggleAudio}
             aria-label="Toggle audio effects"
             className="p-2 rounded bg-dark-900 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 hover:scale-105 transition-all"
-            title={soundOn ? 'Mute JARVIS Sound FX' : 'Enable JARVIS Sound FX'}
+            title={soundOn ? 'Mute HUD Sound FX' : 'Enable HUD Sound FX'}
           >
             {soundOn ? <FiVolume2 className="text-cyan-400" /> : <FiVolumeX className="text-gray-500" />}
           </button>

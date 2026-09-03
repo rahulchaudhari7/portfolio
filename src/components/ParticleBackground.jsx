@@ -1,10 +1,16 @@
-import React, { useCallback, useMemo } from 'react'
-import Particles from '@tsparticles/react'
+import React, { useEffect, useState, useMemo } from 'react'
+import Particles, { initParticlesEngine } from '@tsparticles/react'
 import { loadSlim } from '@tsparticles/slim'
 
 const ParticleBackground = () => {
-  const particlesInit = useCallback(async (engine) => {
-    await loadSlim(engine)
+  const [init, setInit] = useState(false)
+
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine)
+    }).then(() => {
+      setInit(true)
+    })
   }, [])
 
   const options = useMemo(
@@ -89,12 +95,13 @@ const ParticleBackground = () => {
       <div className="absolute inset-0 tech-grid-bg opacity-30 pointer-events-none" />
 
       {/* tsParticles node matrix */}
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={options}
-        className="w-full h-full"
-      />
+      {init && (
+        <Particles
+          id="tsparticles"
+          options={options}
+          className="w-full h-full"
+        />
+      )}
     </div>
   )
 }

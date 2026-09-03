@@ -26,8 +26,13 @@ import Footer from './components/Footer'
 function App() {
   const [loading, setLoading] = useState(true)
 
+  const handleLoadingComplete = () => {
+    setLoading(false)
+  }
+
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2200)
+    // Safety fallback
+    const timer = setTimeout(() => setLoading(false), 3800)
     return () => clearTimeout(timer)
   }, [])
 
@@ -35,7 +40,7 @@ function App() {
     <ThemeProvider>
       <AnimatePresence mode="wait">
         {loading ? (
-          <LoadingScreen key="loading" />
+          <LoadingScreen key="loading" onComplete={handleLoadingComplete} />
         ) : (
           <motion.div
             key="content"

@@ -55,7 +55,7 @@ const JarvisHudBackground = () => {
       y: Math.random() * height,
       vx: (Math.random() - 0.5) * 0.4,
       vy: (Math.random() - 0.5) * 0.4,
-      label: ['0x7F', 'JARVIS', 'AI_CORE', 'MARK_85', 'NOMINAL', '99.8%', 'STARK', 'CU_CSE'][
+      label: ['0x7F', 'RC_DEV', 'AI_CORE', 'MARK_85', 'NOMINAL', '99.8%', 'STARK', 'CU_CSE'][
         Math.floor(Math.random() * 8)
       ],
     }))

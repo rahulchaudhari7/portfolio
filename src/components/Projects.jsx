@@ -16,12 +16,13 @@ const statusConfig = {
   research: { label: 'STARK R&D', icon: FiBookOpen, color: 'text-sky-400 border-sky-500/50 bg-sky-950/60' },
 }
 
-const ProjectCard = ({ project, index }) => {
+const ProjectCard = React.forwardRef(({ project, index }, ref) => {
   const status = statusConfig[project.status]
   const StatusIcon = status?.icon
 
   return (
     <motion.div
+      ref={ref}
       layout
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
@@ -115,7 +116,9 @@ const ProjectCard = ({ project, index }) => {
       </div>
     </motion.div>
   )
-}
+})
+
+ProjectCard.displayName = 'ProjectCard'
 
 const Projects = () => {
   const [activeCategory, setActiveCategory] = useState('All')
