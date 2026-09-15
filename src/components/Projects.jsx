@@ -19,6 +19,7 @@ const statusConfig = {
 const ProjectCard = React.forwardRef(({ project, index }, ref) => {
   const status = statusConfig[project.status]
   const StatusIcon = status?.icon
+  const demoHost = project.demo ? project.demo.replace(/^https?:\/\//, '').replace(/\/$/, '') : null
 
   return (
     <motion.div
@@ -37,7 +38,7 @@ const ProjectCard = React.forwardRef(({ project, index }, ref) => {
       <div className="absolute top-2 right-2 z-10 w-3 h-3 border-t-2 border-r-2 border-cyan-400" />
 
       {/* Image / Hologram Banner */}
-      <div className="relative h-48 overflow-hidden bg-dark-950 border-b border-cyan-500/20 flex items-center justify-center">
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-dark-950 via-cyan-950/40 to-dark-950 border-b border-cyan-500/20 flex items-center justify-center">
         <img
           src={project.image}
           alt={project.title}
@@ -50,11 +51,23 @@ const ProjectCard = React.forwardRef(({ project, index }, ref) => {
         {/* Hologram Overlay Line */}
         <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-cyan-500/10 pointer-events-none" />
 
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <span className="text-5xl font-display font-black text-cyan-400/20 group-hover:text-cyan-400/40 transition-colors uppercase">
+        {/* Dynamic Monogram + Cyber Grid */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none p-4">
+          <span className="text-5xl font-display font-black text-cyan-400/25 group-hover:text-cyan-400/50 transition-colors uppercase tracking-widest">
             {project.title.charAt(0)}
           </span>
+          <span className="text-[10px] font-mono tracking-widest text-cyan-500/60 uppercase mt-1">
+            // {project.category}
+          </span>
         </div>
+
+        {/* Live Indicator on Top Left */}
+        {project.demo && (
+          <span className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded bg-dark-950/90 border border-emerald-500/50 text-emerald-400 text-[10px] font-mono font-bold tracking-wider uppercase shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            LIVE
+          </span>
+        )}
 
         {status && (
           <span className={`absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase border shadow-sm ${status.color}`}>
@@ -66,9 +79,26 @@ const ProjectCard = React.forwardRef(({ project, index }, ref) => {
 
       {/* Content */}
       <div className="p-6 flex flex-col flex-1 font-sans">
-        <h3 className="text-lg font-display font-black mb-2 text-slate-100 uppercase tracking-wide group-hover:text-cyan-300 transition-colors">
-          {project.title}
-        </h3>
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3 className="text-lg font-display font-black text-slate-100 uppercase tracking-wide group-hover:text-cyan-300 transition-colors">
+            {project.title}
+          </h3>
+        </div>
+
+        {/* Live Host Tag if deployed */}
+        {demoHost && (
+          <a
+            href={project.demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center gap-1.5 text-[11px] font-mono text-cyan-400/90 hover:text-amber-400 transition-colors mb-3 truncate"
+          >
+            <FiExternalLink size={12} className="shrink-0 text-cyan-400" />
+            <span className="truncate underline underline-offset-2">{demoHost}</span>
+          </a>
+        )}
+
         <p className="text-xs font-tech text-slate-300 mb-4 flex-1 leading-relaxed">
           {project.description}
         </p>
@@ -103,9 +133,9 @@ const ProjectCard = React.forwardRef(({ project, index }, ref) => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 text-cyan-400 hover:text-amber-400 transition-colors font-bold uppercase"
+              className="flex items-center gap-1.5 text-cyan-300 hover:text-amber-300 bg-cyan-950/60 hover:bg-cyan-900/60 px-2.5 py-1 rounded border border-cyan-500/40 hover:border-amber-400 transition-colors font-bold uppercase"
             >
-              <FiExternalLink /> LIVE_DEMO
+              <FiExternalLink /> LAUNCH_LIVE
             </a>
           ) : (
             <span className="flex items-center gap-1.5 text-slate-600 cursor-not-allowed uppercase">

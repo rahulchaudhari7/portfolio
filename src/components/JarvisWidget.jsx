@@ -5,7 +5,7 @@ import { jarvisAudio } from '../utils/jarvisAudio'
 
 const presetCommands = [
   { label: 'Analyze Skills Matrix', action: 'skills', voice: 'Scanning Rahul\'s skills matrix. Python proficiency at 85 percent, AI/ML models loaded.' },
-  { label: 'Display Key Projects', action: 'projects', voice: 'Displaying high-priority Stark projects including IELTS AI Platform and Authentication Engine.' },
+  { label: 'Display Key Projects', action: 'projects', voice: 'Displaying deployed Stark projects including IELTS AI Platform, ExamMind AI, AgentCart, and NexShop.' },
   { label: 'System Diagnostics', action: 'diagnostics', voice: 'Running full system diagnostics. All quantum cores operational at 99.8 percent efficiency.' },
   { label: 'Establish Contact Channel', action: 'contact', voice: 'Opening direct communication channel to Rahul Chaudhary.' },
 ]
@@ -77,8 +77,8 @@ const JarvisWidget = () => {
 
       if (query.includes('hello') || query.includes('hi') || query.includes('jarvis')) {
         reply = "At your service. Systems are online and monitoring Rahul Chaudhary's portfolio telemetry."
-      } else if (query.includes('project') || query.includes('work') || query.includes('ielts')) {
-        reply = 'Rahul has developed the AI IELTS Preparation Platform, Full Stack Auth System, and medical robotics research.'
+      } else if (query.includes('project') || query.includes('work') || query.includes('ielts') || query.includes('exam') || query.includes('cart') || query.includes('shop')) {
+        reply = 'Rahul has developed the AI IELTS Platform, ExamMind AI, AgentCart AI, and NexShop Online e-commerce marketplace.'
         const el = document.getElementById('projects')
         if (el) el.scrollIntoView({ behavior: 'smooth' })
       } else if (query.includes('skill') || query.includes('python') || query.includes('tech')) {
