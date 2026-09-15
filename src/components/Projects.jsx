@@ -1,146 +1,216 @@
 import React, { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiGithub, FiExternalLink, FiSearch, FiClock, FiCheckCircle, FiLoader, FiBookOpen, FiCpu } from 'react-icons/fi'
+import {
+  FiGithub,
+  FiExternalLink,
+  FiSearch,
+  FiCpu,
+  FiCheck,
+  FiShoppingBag,
+  FiBookOpen,
+  FiGlobe,
+  FiLayers,
+  FiTerminal,
+} from 'react-icons/fi'
 import { projects, projectCategories } from '../data/portfolioData'
 import { jarvisAudio } from '../utils/jarvisAudio'
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 25 },
   visible: { opacity: 1, y: 0 },
 }
 
-const statusConfig = {
-  completed: { label: 'DEPLOYED', icon: FiCheckCircle, color: 'text-emerald-400 border-emerald-500/50 bg-emerald-950/60' },
-  'in-progress': { label: 'PROTOCOL ACTIVE', icon: FiLoader, color: 'text-amber-400 border-amber-500/50 bg-amber-950/60' },
-  planned: { label: 'PLANNED MODULE', icon: FiClock, color: 'text-cyan-400 border-cyan-500/50 bg-cyan-950/60' },
-  research: { label: 'STARK R&D', icon: FiBookOpen, color: 'text-sky-400 border-sky-500/50 bg-sky-950/60' },
+// Visual theme configurations for abstract thumbnail previews
+const projectThemes = {
+  'agent-cart': {
+    bg: 'from-cyan-950/90 via-slate-950 to-blue-950/80',
+    border: 'border-cyan-500/40',
+    glow: 'rgba(0, 243, 255, 0.25)',
+    icon: FiShoppingBag,
+    accent: 'text-cyan-400',
+    badge: 'AI SHOPPING AGENT',
+  },
+  'nexshop-online': {
+    bg: 'from-emerald-950/90 via-slate-950 to-teal-950/80',
+    border: 'border-emerald-500/40',
+    glow: 'rgba(16, 185, 129, 0.25)',
+    icon: FiGlobe,
+    accent: 'text-emerald-400',
+    badge: 'NEPAL E-COMMERCE',
+  },
+  'exam-mind-ai': {
+    bg: 'from-indigo-950/90 via-slate-950 to-purple-950/80',
+    border: 'border-indigo-500/40',
+    glow: 'rgba(99, 102, 241, 0.25)',
+    icon: FiBookOpen,
+    accent: 'text-indigo-400',
+    badge: 'STUDY ASSISTANT',
+  },
+  'ielts-platform': {
+    bg: 'from-sky-950/90 via-slate-950 to-cyan-950/80',
+    border: 'border-cyan-500/40',
+    glow: 'rgba(14, 165, 233, 0.25)',
+    icon: FiLayers,
+    accent: 'text-sky-400',
+    badge: 'IELTS PREPARATION',
+  },
 }
 
 const ProjectCard = React.forwardRef(({ project, index }, ref) => {
-  const status = statusConfig[project.status]
-  const StatusIcon = status?.icon
+  const isLive = project.isLive || Boolean(project.demo)
+  const theme = projectThemes[project.id] || {
+    bg: 'from-dark-950 via-slate-950 to-cyan-950/40',
+    border: 'border-cyan-500/30',
+    glow: 'rgba(0, 243, 255, 0.15)',
+    icon: FiTerminal,
+    accent: 'text-cyan-400',
+    badge: project.category,
+  }
+  const ThemeIcon = theme.icon
   const demoHost = project.demo ? project.demo.replace(/^https?:\/\//, '').replace(/\/$/, '') : null
 
   return (
     <motion.div
       ref={ref}
       layout
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.9 }}
+      exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      whileHover={{ y: -8 }}
-      onClick={() => jarvisAudio.playBeep(1100, 'sine', 0.08)}
-      className="group rounded-2xl overflow-hidden bg-dark-900/90 border border-cyan-500/30 hover:border-cyan-400 shadow-hud-cyan transition-all flex flex-col relative"
+      whileHover={{ y: -6 }}
+      onClick={() => jarvisAudio.playBeep(1100, 'sine', 0.06)}
+      className="group rounded-2xl overflow-hidden bg-dark-900/90 border border-cyan-500/30 hover:border-cyan-400 shadow-hud-cyan transition-all flex flex-col relative font-sans"
     >
       {/* Corner Bracket Accents */}
       <div className="absolute top-2 left-2 z-10 w-3 h-3 border-t-2 border-l-2 border-cyan-400" />
       <div className="absolute top-2 right-2 z-10 w-3 h-3 border-t-2 border-r-2 border-cyan-400" />
 
-      {/* Image / Hologram Banner */}
-      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-dark-950 via-cyan-950/40 to-dark-950 border-b border-cyan-500/20 flex items-center justify-center">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100"
-          onError={(e) => {
-            e.target.style.display = 'none'
-          }}
+      {/* Abstract Project Thumbnail Banner (Clean, no broken images) */}
+      <div
+        className={`relative h-44 sm:h-48 overflow-hidden bg-gradient-to-br ${theme.bg} border-b border-cyan-500/20 flex flex-col justify-between p-4`}
+      >
+        {/* Subtle Cyber Grid Background overlay */}
+        <div
+          className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#00f3ff_1px,transparent_1px)] [background-size:16px_16px]"
+          style={{ maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)' }}
         />
-        
-        {/* Hologram Overlay Line */}
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-cyan-500/10 pointer-events-none" />
 
-        {/* Dynamic Monogram + Cyber Grid */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none p-4">
-          <span className="text-5xl font-display font-black text-cyan-400/25 group-hover:text-cyan-400/50 transition-colors uppercase tracking-widest">
-            {project.title.charAt(0)}
-          </span>
-          <span className="text-[10px] font-mono tracking-widest text-cyan-500/60 uppercase mt-1">
-            // {project.category}
+        {/* Top Badges: LIVE status & Category */}
+        <div className="relative z-10 flex items-center justify-between gap-2 w-full">
+          {isLive ? (
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-dark-950/90 border border-emerald-500/60 text-emerald-400 text-[10px] font-mono font-bold tracking-wider uppercase shadow-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+              </span>
+              LIVE
+            </span>
+          ) : (
+            <span className="px-2.5 py-1 rounded bg-dark-950/90 border border-cyan-500/40 text-cyan-400 text-[10px] font-mono font-bold tracking-wider uppercase">
+              R&amp;D
+            </span>
+          )}
+
+          <span className="px-2.5 py-1 rounded bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 text-[10px] font-mono tracking-wider uppercase font-semibold">
+            {theme.badge}
           </span>
         </div>
 
-        {/* Live Indicator on Top Left */}
-        {project.demo && (
-          <span className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded bg-dark-950/90 border border-emerald-500/50 text-emerald-400 text-[10px] font-mono font-bold tracking-wider uppercase shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            LIVE
+        {/* Center Holographic Icon & Title Monogram */}
+        <div className="relative z-10 flex flex-col items-center justify-center my-auto text-center">
+          <div className="w-14 h-14 rounded-2xl bg-dark-950/80 border border-cyan-400/40 flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:border-amber-400 transition-all">
+            <ThemeIcon size={26} className={`${theme.accent} group-hover:text-amber-400 transition-colors`} />
+          </div>
+          <span className="text-[10px] font-mono text-cyan-400/70 tracking-widest uppercase mt-2">
+            // STARK ARCHITECTURE
           </span>
-        )}
+        </div>
 
-        {status && (
-          <span className={`absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase border shadow-sm ${status.color}`}>
-            <StatusIcon size={12} className="animate-pulse" />
-            {status.label}
-          </span>
+        {/* Bottom Banner: Host Domain Tag */}
+        {demoHost && (
+          <div className="relative z-10 flex items-center justify-between text-[11px] font-mono text-cyan-400/90 bg-dark-950/80 px-2.5 py-1 rounded border border-cyan-500/20 backdrop-blur-xs">
+            <span className="truncate flex items-center gap-1">
+              <span className="text-amber-400">HOST:</span> {demoHost}
+            </span>
+            <FiExternalLink size={12} className="text-cyan-400 shrink-0 ml-1" />
+          </div>
         )}
       </div>
 
-      {/* Content */}
-      <div className="p-6 flex flex-col flex-1 font-sans">
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="text-lg font-display font-black text-slate-100 uppercase tracking-wide group-hover:text-cyan-300 transition-colors">
-            {project.title}
-          </h3>
-        </div>
+      {/* Content Body */}
+      <div className="p-6 flex flex-col flex-1">
+        <h3 className="text-lg font-display font-black text-slate-100 mb-2 uppercase tracking-wide group-hover:text-cyan-300 transition-colors leading-snug">
+          {project.title}
+        </h3>
 
-        {/* Live Host Tag if deployed */}
-        {demoHost && (
-          <a
-            href={project.demo}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 text-[11px] font-mono text-cyan-400/90 hover:text-amber-400 transition-colors mb-3 truncate"
-          >
-            <FiExternalLink size={12} className="shrink-0 text-cyan-400" />
-            <span className="truncate underline underline-offset-2">{demoHost}</span>
-          </a>
-        )}
-
-        <p className="text-xs font-tech text-slate-300 mb-4 flex-1 leading-relaxed">
+        <p className="text-xs font-tech text-slate-300 mb-4 leading-relaxed">
           {project.description}
         </p>
 
-        <div className="flex flex-wrap gap-1.5 mb-5">
+        {/* Key Features Highlights */}
+        {project.features && project.features.length > 0 && (
+          <div className="mb-4 p-3 rounded-lg bg-dark-950/70 border border-cyan-500/20">
+            <span className="text-[10px] font-mono text-cyan-400 font-bold block mb-1.5 uppercase tracking-wider">
+              HIGHLIGHT FEATURES:
+            </span>
+            <ul className="grid grid-cols-1 gap-1 text-[11px] font-mono text-slate-300">
+              {project.features.slice(0, 4).map((feat) => (
+                <li key={feat} className="flex items-start gap-1.5 leading-tight">
+                  <FiCheck size={12} className="text-cyan-400 shrink-0 mt-0.5" />
+                  <span>{feat}</span>
+                </li>
+              ))}
+              {project.features.length > 4 && (
+                <li className="text-[10px] text-cyan-500/80 font-mono italic pl-4">
+                  + {project.features.length - 4} more capabilities
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+
+        {/* Tech Stack Badges */}
+        <div className="flex flex-wrap gap-1.5 mb-5 mt-auto">
           {project.tech.map((t) => (
-            <span key={t} className="text-[10px] font-mono font-semibold px-2.5 py-1 rounded bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 uppercase">
+            <span
+              key={t}
+              className="text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 uppercase"
+            >
               {t}
             </span>
           ))}
         </div>
 
-        <div className="flex gap-4 mt-auto pt-3 border-t border-cyan-500/20 font-mono text-xs">
-          {project.github ? (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 text-cyan-400 hover:text-amber-400 transition-colors font-bold uppercase"
-            >
-              <FiGithub /> CODE_SRC
-            </a>
-          ) : (
-            <span className="flex items-center gap-1.5 text-slate-600 cursor-not-allowed uppercase">
-              <FiGithub /> PRIVATE_REPO
-            </span>
-          )}
+        {/* Action Buttons Row */}
+        <div className="pt-3 border-t border-cyan-500/20 flex items-center justify-between gap-3 font-mono text-xs">
           {project.demo ? (
             <a
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 text-cyan-300 hover:text-amber-300 bg-cyan-950/60 hover:bg-cyan-900/60 px-2.5 py-1 rounded border border-cyan-500/40 hover:border-amber-400 transition-colors font-bold uppercase"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-amber-400 hover:to-amber-300 text-dark-950 font-bold uppercase tracking-wider shadow-[0_0_12px_rgba(0,243,255,0.3)] hover:shadow-[0_0_16px_rgba(251,191,36,0.4)] transition-all"
             >
-              <FiExternalLink /> LAUNCH_LIVE
+              <span>Live Demo ↗</span>
             </a>
           ) : (
-            <span className="flex items-center gap-1.5 text-slate-600 cursor-not-allowed uppercase">
-              <FiExternalLink /> OFFLINE
+            <span className="flex-1 text-center py-2 text-slate-600 text-[11px] uppercase font-bold">
+              Research Prototype
             </span>
+          )}
+
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-dark-950 border border-cyan-500/40 text-cyan-300 hover:border-amber-400 hover:text-amber-400 transition-colors uppercase font-bold text-[11px]"
+              title="View Source Repository"
+            >
+              <FiGithub size={14} />
+              <span className="hidden sm:inline">Code ↗</span>
+            </a>
           )}
         </div>
       </div>
@@ -161,11 +231,20 @@ const Projects = () => {
 
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
-      const matchesCategory = activeCategory === 'All' || p.category === activeCategory
+      let matchesCategory = true
+      if (activeCategory === 'Live Projects') {
+        matchesCategory = Boolean(p.isLive || p.demo)
+      } else if (activeCategory !== 'All') {
+        matchesCategory = p.category === activeCategory
+      }
+
+      const q = searchTerm.toLowerCase()
       const matchesSearch =
-        p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.tech.some((t) => t.toLowerCase().includes(searchTerm.toLowerCase()))
+        p.title.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q) ||
+        p.tech.some((t) => t.toLowerCase().includes(q)) ||
+        (p.features && p.features.some((f) => f.toLowerCase().includes(q)))
+
       return matchesCategory && matchesSearch
     })
   }, [activeCategory, searchTerm])
@@ -182,14 +261,17 @@ const Projects = () => {
       >
         <p className="text-cyan-400 font-mono text-xs mb-2 tracking-widest uppercase flex items-center justify-center gap-2">
           <FiCpu className="text-amber-400 animate-pulse" />
-          STARK PROTOCOLS // ARCHITECTURAL BLUEPRINTS
+          STARK PROTOCOLS // DEPLOYED SYSTEMS
         </p>
         <h2 className="text-3xl md:text-5xl font-display font-black uppercase tracking-wider">
-          PROJECT <span className="gradient-text">REPOSITORY</span>
+          LIVE <span className="gradient-text">PROJECTS</span>
         </h2>
+        <p className="text-slate-400 text-xs md:text-sm font-tech max-w-xl mx-auto mt-2">
+          Production platforms and autonomous AI systems deployed with active cloud telemetry.
+        </p>
       </motion.div>
 
-      {/* Search and filters */}
+      {/* Search and Category Filters */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -202,7 +284,7 @@ const Projects = () => {
           <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400" />
           <input
             type="text"
-            placeholder="SEARCH BLUEPRINTS..."
+            placeholder="SEARCH LIVE SYSTEMS & TECH..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-11 pr-4 py-2.5 rounded-lg bg-dark-900 border border-cyan-500/40 focus:border-cyan-400 text-cyan-200 placeholder:text-cyan-600 font-mono text-xs outline-none shadow-hud-cyan uppercase"
@@ -226,8 +308,8 @@ const Projects = () => {
         </div>
       </motion.div>
 
-      {/* Projects grid */}
-      <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Projects grid: 2-column on md/lg desktop for spacious readability */}
+      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project, idx) => (
             <ProjectCard key={project.id} project={project} index={idx} />
@@ -241,7 +323,7 @@ const Projects = () => {
           animate={{ opacity: 1 }}
           className="text-center mt-10 font-mono text-xs text-slate-400 uppercase tracking-widest"
         >
-          [NO BLUEPRINTS MATCH SEARCH QUERY]
+          [NO LIVE SYSTEMS MATCH SEARCH QUERY]
         </motion.p>
       )}
     </section>

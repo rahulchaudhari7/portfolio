@@ -93,6 +93,10 @@ const JarvisWidget = () => {
         reply = 'Rahul is pursuing Bachelor of Engineering in CS with AI/ML Specialization at Chandigarh University (CGPA 7.84).'
         const el = document.getElementById('education')
         if (el) el.scrollIntoView({ behavior: 'smooth' })
+      } else if (query.includes('cert') || query.includes('kulture') || query.includes('jpmorgan') || query.includes('forage')) {
+        reply = 'Rahul holds accredited certifications from KultureHire in Generative AI and Problem Solving, JPMorgan Chase software simulation, and Chandigarh University.'
+        const el = document.getElementById('certifications')
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
       }
 
       setMessages((prev) => [

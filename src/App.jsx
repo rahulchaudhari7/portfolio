@@ -59,9 +59,9 @@ function App() {
               <About />
               <Skills />
               <Projects />
+              <Certifications />
               <Experience />
               <Education />
-              <Certifications />
               <Achievements />
               <Resume />
               <Contact />

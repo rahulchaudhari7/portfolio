@@ -9,6 +9,7 @@ const quickLinks = [
   { name: 'About', to: 'about' },
   { name: 'Skills', to: 'skills' },
   { name: 'Projects', to: 'projects' },
+  { name: 'Certifications', to: 'certifications' },
   { name: 'Experience', to: 'experience' },
   { name: 'Contact', to: 'contact' },
 ]
