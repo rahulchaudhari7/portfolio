@@ -8,6 +8,8 @@ import ScrollProgressBar from './components/ScrollProgressBar'
 import AnimatedCursor from './components/AnimatedCursor'
 import BackToTop from './components/BackToTop'
 import LoadingScreen from './components/LoadingScreen'
+import JarvisWidget from './components/JarvisWidget'
+import JarvisHudBackground from './components/JarvisHudBackground'
 
 import Hero from './components/Hero'
 import About from './components/About'
@@ -24,8 +26,13 @@ import Footer from './components/Footer'
 function App() {
   const [loading, setLoading] = useState(true)
 
+  const handleLoadingComplete = () => {
+    setLoading(false)
+  }
+
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000)
+    // Safety fallback
+    const timer = setTimeout(() => setLoading(false), 3800)
     return () => clearTimeout(timer)
   }, [])
 
@@ -33,7 +40,7 @@ function App() {
     <ThemeProvider>
       <AnimatePresence mode="wait">
         {loading ? (
-          <LoadingScreen key="loading" />
+          <LoadingScreen key="loading" onComplete={handleLoadingComplete} />
         ) : (
           <motion.div
             key="content"
@@ -41,6 +48,7 @@ function App() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
+            <JarvisHudBackground />
             <Toaster position="top-right" />
             <AnimatedCursor />
             <ScrollProgressBar />
@@ -51,15 +59,16 @@ function App() {
               <About />
               <Skills />
               <Projects />
+              <Certifications />
               <Experience />
               <Education />
-              <Certifications />
               <Achievements />
               <Resume />
               <Contact />
             </main>
 
             <Footer />
+            <JarvisWidget />
             <BackToTop />
           </motion.div>
         )}

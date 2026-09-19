@@ -1,106 +1,185 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
-import { FiAward, FiUpload, FiExternalLink, FiX } from 'react-icons/fi'
-import { certifications as initialCerts } from '../data/portfolioData'
+import {
+  FiAward,
+  FiExternalLink,
+  FiFileText,
+  FiCpu,
+  FiCalendar,
+  FiCheckCircle,
+  FiCheck,
+} from 'react-icons/fi'
+import { certifications } from '../data/portfolioData'
+import { jarvisAudio } from '../utils/jarvisAudio'
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 25 },
   visible: { opacity: 1, y: 0 },
 }
 
 const Certifications = () => {
-  const [certs, setCerts] = useState(initialCerts)
-  const [uploadingId, setUploadingId] = useState(null)
-
-  const handleFileChange = (id, e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const url = URL.createObjectURL(file)
-    setCerts((prev) => prev.map((c) => (c.id === id ? { ...c, image: url, uploaded: true } : c)))
-    setUploadingId(null)
-  }
-
-  const removeUpload = (id) => {
-    setCerts((prev) => prev.map((c) => (c.id === id ? { ...c, image: '', uploaded: false } : c)))
-  }
-
   return (
-    <section id="certifications" className="section">
+    <section id="certifications" className="section relative">
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={fadeUp}
         transition={{ duration: 0.6 }}
-        className="text-center mb-16"
+        className="text-center mb-12"
       >
-        <p className="text-primary-500 font-mono text-sm mb-2 tracking-widest uppercase">Verified learning</p>
-        <h2 className="text-3xl md:text-5xl font-display font-extrabold">
-          <span className="gradient-text">Certifications</span>
+        <p className="text-cyan-400 font-mono text-xs mb-2 tracking-widest uppercase flex items-center justify-center gap-2">
+          <FiCpu className="text-amber-400 animate-pulse" />
+          VERIFIED CREDENTIALS // ACCREDITATION ARCHIVE
+        </p>
+        <h2 className="text-3xl md:text-5xl font-display font-black uppercase tracking-wider">
+          HONORS &amp; <span className="gradient-text">CERTIFICATIONS</span>
         </h2>
+        <p className="text-slate-400 text-xs md:text-sm font-tech max-w-xl mx-auto mt-2">
+          Official engineering certifications, industrial simulations, and hackathon recognitions.
+        </p>
       </motion.div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {certs.map((cert, idx) => (
+      {/* 2-column grid on desktop, 1-column on mobile */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+        {certifications.map((cert, idx) => (
           <motion.div
             key={cert.id}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.15 }}
             variants={fadeUp}
-            transition={{ duration: 0.5, delay: idx * 0.1 }}
-            whileHover={{ y: -6 }}
-            className="rounded-2xl glass border border-white/5 hover:border-primary-500/30 transition-colors overflow-hidden flex flex-col"
+            transition={{ duration: 0.45, delay: idx * 0.06 }}
+            whileHover={{ y: -4 }}
+            onClick={() => jarvisAudio.playBeep(1300, 'sine', 0.05)}
+            className="rounded-2xl bg-dark-900/90 border border-cyan-500/30 hover:border-cyan-400/80 shadow-hud-cyan transition-all p-6 flex flex-col justify-between relative group font-sans"
           >
-            <div className="relative h-36 bg-gradient-to-br from-primary-500/15 to-accent-500/15 flex items-center justify-center">
-              {cert.image && cert.uploaded ? (
-                <img src={cert.image} alt={cert.title} className="w-full h-full object-cover" />
-              ) : (
-                <FiAward size={36} className="text-primary-500/50" />
+            {/* Corner Bracket Accents */}
+            <div className="absolute top-2 left-2 z-10 w-2.5 h-2.5 border-t-2 border-l-2 border-cyan-400" />
+            <div className="absolute top-2 right-2 z-10 w-2.5 h-2.5 border-t-2 border-r-2 border-cyan-400" />
+
+            <div>
+              {/* Header: Icon, Issuer, Category Badge */}
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-950/70 border border-cyan-500/40 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:border-cyan-300 transition-all shadow-sm shrink-0">
+                    <FiAward size={20} className="text-cyan-400 group-hover:text-amber-400 transition-colors" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider block">
+                      {cert.issuer}
+                    </span>
+                    {cert.provider && (
+                      <span className="text-[11px] font-mono text-slate-400 block -mt-0.5">
+                        via {cert.provider}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 shrink-0">
+                  {cert.category}
+                </span>
+              </div>
+
+              {/* Certificate Title */}
+              <h3 className="font-display font-black text-slate-100 text-base md:text-lg mb-2 group-hover:text-cyan-300 transition-colors leading-snug">
+                {cert.title}
+              </h3>
+
+              {/* Metadata Details (Date, ID, Instructor, Duration, Event) */}
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-slate-400 mb-3">
+                <span className="flex items-center gap-1 text-slate-300">
+                  <FiCalendar size={12} className="text-cyan-400" />
+                  {cert.date}
+                </span>
+
+                {cert.credentialType && (
+                  <span className="text-cyan-400/80">
+                    &middot; {cert.credentialType}
+                  </span>
+                )}
+
+                {cert.duration && (
+                  <span className="text-slate-400">
+                    &middot; {cert.duration}
+                  </span>
+                )}
+
+                {cert.credentialId && (
+                  <span className="text-amber-400/90 font-bold">
+                    &middot; ID: {cert.credentialId}
+                  </span>
+                )}
+
+                {cert.instructor && (
+                  <span className="text-slate-400 block w-full mt-1">
+                    Instructor: <strong className="text-slate-300">{cert.instructor}</strong>
+                  </span>
+                )}
+
+                {cert.event && (
+                  <span className="text-cyan-400/90 block w-full mt-1">
+                    Event: {cert.event}
+                  </span>
+                )}
+              </div>
+
+              {/* Practical tasks included if present */}
+              {cert.tasks && cert.tasks.length > 0 && (
+                <div className="mb-3 p-3 rounded-lg bg-dark-950/80 border border-cyan-500/20 text-xs">
+                  <span className="text-[11px] font-mono text-cyan-400 font-bold block mb-1.5 uppercase tracking-wider">
+                    Practical Tasks Included:
+                  </span>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1 font-mono text-[11px] text-slate-300">
+                    {cert.tasks.map((task) => (
+                      <li key={task} className="flex items-center gap-1.5">
+                        <FiCheck size={11} className="text-emerald-400 shrink-0" />
+                        <span>{task}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
 
-              {cert.uploaded && (
-                <button
-                  onClick={() => removeUpload(cert.id)}
-                  className="absolute top-2 right-2 p-1.5 rounded-full glass hover:text-red-500"
-                  aria-label="Remove certificate"
-                >
-                  <FiX size={14} />
-                </button>
+              {/* Skills/Tags */}
+              {cert.skills && cert.skills.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {cert.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-cyan-950/50 border border-cyan-500/20 text-cyan-300"
+                    >
+                      #{skill}
+                    </span>
+                  ))}
+                </div>
               )}
             </div>
 
-            <div className="p-5 flex flex-col flex-1">
-              <span className="text-xs font-mono text-primary-500 mb-1">{cert.category}</span>
-              <h3 className="font-display font-bold mb-1 text-sm">{cert.title}</h3>
-              <p className="text-xs mb-4" style={{ color: 'var(--text-secondary)' }}>
-                {cert.issuer} &middot; {cert.date}
-              </p>
+            {/* Bottom Action Area */}
+            <div className="pt-3 border-t border-cyan-500/20 flex items-center justify-between mt-auto">
+              {cert.verificationUrl ? (
+                <a
+                  href={cert.verificationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-950/80 hover:bg-cyan-500 text-cyan-300 hover:text-dark-950 border border-cyan-500/40 hover:border-cyan-400 font-mono text-xs font-bold uppercase transition-all shadow-sm group/btn"
+                >
+                  <FiExternalLink size={13} className="text-cyan-400 group-hover/btn:text-dark-950 transition-colors" />
+                  <span>View Certificate ↗</span>
+                </a>
+              ) : (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-dark-950/80 border border-slate-700/50 text-slate-400 font-mono text-[11px]">
+                  <FiFileText size={13} className="text-amber-400/90 shrink-0" />
+                  <span>Certificate available on request</span>
+                </div>
+              )}
 
-              <div className="mt-auto flex flex-col gap-2">
-                <label className="flex items-center justify-center gap-2 text-xs font-medium px-3 py-2 rounded-full glass cursor-pointer hover:text-primary-500 transition-colors">
-                  <FiUpload size={14} />
-                  {cert.uploaded ? 'Replace Certificate' : 'Upload Certificate'}
-                  <input
-                    type="file"
-                    accept="image/*,.pdf"
-                    className="hidden"
-                    onChange={(e) => handleFileChange(cert.id, e)}
-                  />
-                </label>
-
-                {cert.credentialUrl && (
-                  <a
-                    href={cert.credentialUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 text-xs font-medium px-3 py-2 rounded-full bg-primary-500/10 text-primary-500 hover:bg-primary-500/20 transition-colors"
-                  >
-                    <FiExternalLink size={14} />
-                    View Credential
-                  </a>
-                )}
-              </div>
+              <span className="text-[10px] font-mono text-cyan-600 tracking-wider uppercase hidden sm:inline">
+                // VERIFIED_LOG
+              </span>
             </div>
           </motion.div>
         ))}

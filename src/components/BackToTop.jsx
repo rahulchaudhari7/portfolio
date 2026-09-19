@@ -22,7 +22,7 @@ const BackToTop = () => {
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           onClick={scrollToTop}
           aria-label="Back to top"
-          className="fixed bottom-6 right-6 z-50 p-3 rounded-full gradient-bg text-white shadow-lg shadow-primary-500/30 hover:scale-110 transition-transform"
+          className="fixed bottom-6 right-24 z-40 p-3 rounded-xl bg-dark-900/90 border border-cyan-500/50 text-cyan-400 shadow-hud-cyan hover:border-amber-400 hover:text-amber-400 hover:scale-110 transition-all cursor-pointer"
         >
           <FiArrowUp size={20} />
         </motion.button>

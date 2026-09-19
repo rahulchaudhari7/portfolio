@@ -3,21 +3,24 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5fa;
-  --bg-card: #ffffff;
-  --text-primary: #0a0a0f;
-  --text-secondary: #4b5563;
-  --border-color: #e5e7eb;
+  --bg-primary: #030712;
+  --bg-secondary: #060d1d;
+  --bg-card: rgba(6, 13, 29, 0.75);
+  --text-primary: #f0fdf4;
+  --text-secondary: #94a3b8;
+  --border-color: rgba(0, 243, 255, 0.25);
+  --cyan-glow: #00f3ff;
+  --arc-blue: #0077ff;
+  --stark-gold: #ffb700;
 }
 
 .dark {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #0f0f1a;
-  --bg-card: #13131f;
-  --text-primary: #f5f5fa;
-  --text-secondary: #9ca3af;
-  --border-color: #252540;
+  --bg-primary: #030712;
+  --bg-secondary: #060d1d;
+  --bg-card: rgba(6, 13, 29, 0.85);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --border-color: rgba(0, 243, 255, 0.3);
 }
 
 * {
@@ -28,52 +31,124 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Rajdhani', 'Inter', sans-serif;
   overflow-x: hidden;
+  letter-spacing: 0.02em;
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: #030712;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #6366f1, #a855f7);
-  border-radius: 10px;
+  background: linear-gradient(180deg, #00f3ff, #0077ff);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+}
+
+/* JARVIS HUD Scanline overlay */
+.jarvis-scanlines::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.015) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+  z-index: 40;
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+}
+
+/* Radial Vignette for HUD Canvas */
+.bg-radial-vignette {
+  background: radial-gradient(circle at center, transparent 35%, rgba(3, 7, 18, 0.85) 90%);
+}
+
+/* Tech Grid background */
+.tech-grid-bg {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #6366f1, #a855f7);
+  background: linear-gradient(135deg, #00f3ff 0%, #0088ff 50%, #ffb700 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+.cyan-text-glow {
+  color: #00f3ff;
+  text-shadow: 0 0 8px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+.gold-text-glow {
+  color: #ffb700;
+  text-shadow: 0 0 8px rgba(255, 183, 0, 0.6);
 }
 
 /* Animated gradient background */
 .gradient-bg {
-  background: linear-gradient(-45deg, #6366f1, #a855f7, #4f46e5, #9333ea);
+  background: linear-gradient(-45deg, #00f3ff, #0077ff, #091e42, #ffb700);
   background-size: 300% 300%;
   animation: gradient 8s ease infinite;
 }
 
-/* Glassmorphism card */
+/* HUD Glassmorphism Card */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(6, 13, 29, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 243, 255, 0.05);
 }
 
-.dark .glass {
-  background: rgba(19, 19, 31, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.glass-hud {
+  background: rgba(8, 18, 38, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  position: relative;
 }
 
-.light-glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+.glass-hud::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid #00f3ff;
+  border-right: 2px solid #00f3ff;
+}
+
+.glass-hud::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-bottom: 2px solid #00f3ff;
+  border-left: 2px solid #00f3ff;
+}
+
+/* HUD Bracket Card Corners */
+.hud-card {
+  position: relative;
+  background: rgba(6, 13, 29, 0.8);
+  border: 1px solid rgba(0, 243, 255, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hud-card:hover {
+  border-color: rgba(0, 243, 255, 0.6);
+  box-shadow: 0 0 25px rgba(0, 243, 255, 0.25), inset 0 0 15px rgba(0, 243, 255, 0.1);
+  transform: translateY(-3px);
 }
 
 /* Custom cursor */
@@ -83,21 +158,23 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
 }
 
 .cursor-dot {
-  width: 8px;
-  height: 8px;
-  background: #a855f7;
+  width: 6px;
+  height: 6px;
+  background: #00f3ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff;
 }
 
 .cursor-outline {
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid #6366f1;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(0, 243, 255, 0.7);
+  border-radius: 50%;
   transition: width 0.2s, height 0.2s, border-color 0.2s, background-color 0.2s;
 }
 
@@ -122,16 +199,18 @@ body {
 
 /* Skill progress bar */
 .skill-bar-bg {
-  background: var(--bg-secondary);
+  background: rgba(0, 243, 255, 0.1);
+  border: 1px solid rgba(0, 243, 255, 0.2);
   border-radius: 9999px;
   overflow: hidden;
-  height: 8px;
+  height: 10px;
 }
 
 .skill-bar-fill {
   height: 100%;
   border-radius: 9999px;
-  background: linear-gradient(90deg, #6366f1, #a855f7);
+  background: linear-gradient(90deg, #00f3ff, #0077ff, #ffb700);
+  box-shadow: 0 0 12px rgba(0, 243, 255, 0.8);
 }
 
 /* Focus visibility */
@@ -139,7 +218,7 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #a855f7;
+  outline: 2px solid #00f3ff;
   outline-offset: 2px;
 }
 
