@@ -31,7 +31,7 @@ export const personalInfo = {
 }
 
 export const socialLinks = {
-  github: "https://github.com/rahulchaudhari10",
+  github: "https://github.com/rahulchaudhari7",
   linkedin: "https://www.linkedin.com/in/chaudhary-rahul07/",
   email: "mailto:chaudharyraul07@gmail.com",
   leetcode: "https://leetcode.com/u/Rahul_Chaudharii/",
@@ -115,7 +115,7 @@ export const projects = [
       "A secure full-stack login and registration system built with React, Node.js, MongoDB, and JWT — featuring password hashing, protected routes, token refresh, and a clean, responsive UI for sign-up, login, and profile management.",
     image: "/projects/auth-system.jpg",
     tech: ["React", "Node.js", "Express.js", "MongoDB", "JWT", "Tailwind CSS"],
-    github: "https://github.com/yourusername/auth-system",
+    github: "https://github.com/rahulchaudhari7/Authentication-System",
     demo: "https://auth-system-demo.vercel.app",
     category: "Web Development",
     status: "completed",
@@ -135,17 +135,17 @@ export const projects = [
     featured: false,
   },
   {
-    id: "ai-ml-mini-projects",
+    id: "selector dashboard",
     title: "AI/ML Mini Projects",
     description:
       "A growing collection of small machine learning projects exploring core concepts — including data preprocessing with Pandas & NumPy, classification and regression models with Scikit-Learn, and simple prediction tools applied to real-world datasets.",
     image: "/projects/ai-ml-mini.jpg",
     tech: ["Python", "NumPy", "Pandas", "Scikit-Learn", "Jupyter Notebook"],
-    github: "https://github.com/yourusername/ai-ml-mini-projects",
+    github: "https://github.com/rahulchaudhari7/selector-dashboard",
     demo: "",
     category: "AI/ML",
-    status: "in-progress",
-    featured: false,
+    status: "complete",
+    featured: true,
   },
   {
     id: "medical-ai-robotics-research",
@@ -162,18 +162,17 @@ export const projects = [
     isResearch: true,
   },
   {
-    id: "future-projects-1",
-    title: "Future AI/ML Project",
+    id: "redux post composer",
+    title: "Full stack Project",
     description:
-      "Placeholder for an upcoming AI/ML project. Details coming soon as this project moves into development.",
+      "The project is for the full stack where we use react.",
     image: "/projects/placeholder.jpg",
     tech: ["Python", "AI/ML"],
-    github: "",
+    github: "https://github.com/rahulchaudhari7/redux_post_manager",
     demo: "",
     category: "AI/ML",
-    status: "planned",
-    featured: false,
-    isPlaceholder: true,
+    status: "active",
+    featured: true,
   },
   {
     id: "future-projects-2",
